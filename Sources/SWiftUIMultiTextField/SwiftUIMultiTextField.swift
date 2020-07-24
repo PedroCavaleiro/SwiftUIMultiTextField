@@ -76,6 +76,8 @@ public struct MultiTextField: UIViewRepresentable {
 
 public class ObservedMultiTextField: ObservableObject {
     
-    @Published var size: CGFloat = 0
+    @Published public var size: CGFloat = 0
+    
+    public init() { }
     
 }
