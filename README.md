@@ -43,3 +43,14 @@ struct ContentView: View {
 
 }
 ```
+
+## Initializers
+
+All fields except text are optional
+
+| Parameter     | Type              | Description                                      | Default  | Optional |
+| ------------- | ----------------- | ------------------------------------------------ | -------- | -------- |
+| `text`        | `Binding<String>` | Variable that will store the text                |          | No       |
+| `placeholder` | `String`          | Placeholder string                               | `""`     | Yes      |
+| `maxSize`     | `CGFloat`         | Max size of the TextField set `-1` for unlimited | `-1`     | Yes      |
+| `textColor`   | `UIColor`         | Text color (not the placeholder)                 | `.black` | Yes      |
