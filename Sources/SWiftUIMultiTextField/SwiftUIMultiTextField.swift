@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-public struct SwiftUIMultiTextField: UIViewRepresentable {
+public struct MultiTextField: UIViewRepresentable {
     
     @EnvironmentObject var obj: ObservedMultiTextField
     @Binding var text: String
@@ -12,7 +12,7 @@ public struct SwiftUIMultiTextField: UIViewRepresentable {
     
     @State private var isPlaceholder: Bool = true
     
-    public func makeUIView(context: UIViewRepresentableContext<SwiftUIMultiTextField>) -> UITextView {
+    public func makeUIView(context: UIViewRepresentableContext<MultiTextField>) -> UITextView {
         let view = UITextView()
         view.font = .systemFont(ofSize: 16)
         view.text = placeholder
@@ -26,7 +26,7 @@ public struct SwiftUIMultiTextField: UIViewRepresentable {
         return view
     }
     
-    public func updateUIView(_ uiView: UITextView, context: UIViewRepresentableContext<SwiftUIMultiTextField>) {
+    public func updateUIView(_ uiView: UITextView, context: UIViewRepresentableContext<MultiTextField>) {
         
     }
     
@@ -36,9 +36,9 @@ public struct SwiftUIMultiTextField: UIViewRepresentable {
     
     public class Coordinator: NSObject, UITextViewDelegate {
         
-        var parent: SwiftUIMultiTextField
+        var parent: MultiTextField
         
-        init(parent: SwiftUIMultiTextField) {
+        init(parent: MultiTextField) {
             self.parent = parent
         }
         
@@ -72,10 +72,9 @@ public struct SwiftUIMultiTextField: UIViewRepresentable {
         }
         
     }
-    
 }
 
-class ObservedMultiTextField: ObservableObject {
+public class ObservedMultiTextField: ObservableObject {
     
     @Published var size: CGFloat = 0
     
