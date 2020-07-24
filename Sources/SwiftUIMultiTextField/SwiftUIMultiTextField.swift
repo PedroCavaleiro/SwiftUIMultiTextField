@@ -4,11 +4,11 @@ import UIKit
 public struct SwiftUIMultiTextField: UIViewRepresentable {
     
     @EnvironmentObject var obj: ObservedMultiTextField
-    @Binding var text: String
+    @Binding public var text: String
     
-    var placeholder: String = ""
-    var maxSize: CGFloat = -1.0
-    var textColor: UIColor = UIColor.black
+    public var placeholder: String = ""
+    public var maxSize: CGFloat = -1.0
+    public var textColor: UIColor = UIColor.black
     
     @State private var isPlaceholder: Bool = true
     
