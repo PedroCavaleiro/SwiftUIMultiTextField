@@ -86,5 +86,8 @@ public class ObservedMultiTextField: ObservableObject {
     @Published public var size: CGFloat = 0
     
     public init() { }
+    public init(size: CGFloat) {
+        self.size = size
+    }
     
 }

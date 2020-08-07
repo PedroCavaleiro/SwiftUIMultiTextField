@@ -44,6 +44,11 @@ struct ContentView: View {
 }
 ```
 
+If for some reason the MultiTextField does not appear on step 2 initialize with a custom size (recommend 36)
+```swift
+@ObservedObject var obj: ObservedMultiTextField = ObservedMultiTextField(size: 36)
+```
+
 ## Initializers
 
 All fields except text are optional
