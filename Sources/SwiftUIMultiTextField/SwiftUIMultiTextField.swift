@@ -1,100 +1,10 @@
 import SwiftUI
-
-#if os(macOS)
-import AppKit
-
-public struct MultiTextField: NSViewRepresentable {
-    
-    @EnvironmentObject var obj: ObservedMultiTextField
-    @Binding public var text: String
-    @State private var isPlaceholder: Bool = true
-    
-    public var placeholder: String = ""
-    public var maxSize: CGFloat = -1.0
-    public var textColor: NSColor = NSColor.black
-    
-    public init(text: Binding<String>, placeholder: String = "", maxSize: CGFloat = -1.0, textColor: NSColor = NSColor.black) {
-        self._text = text
-        self.placeholder = placeholder
-        self.maxSize = maxSize
-        self.textColor = textColor
-    }
-    
-    public func makeNSView(context: NSViewRepresentableContext<MultiTextField>) -> NSTextView {
-        let view = NSTextView()
-        view.font = .systemFont(ofSize: 16)
-        view.string = placeholder
-        view.textColor = textColor.withAlphaComponent(0.35)
-        view.backgroundColor = .clear
-        view.delegate = context.coordinator
-        obj.size = view.intrinsicContentSize.height
-        view.isEditable = true
-        return view
-    }
-    
-    public func updateNSView(_ uiView: NSTextView, context: NSViewRepresentableContext<MultiTextField>) {
-        
-    }
-    
-    public func makeCoordinator() -> Coordinator {
-        Coordinator(parent: self)
-    }
-    
-    public class Coordinator: NSObject, NSTextViewDelegate {
-        
-        var parent: MultiTextField
-        
-        init(parent: MultiTextField) {
-            self.parent = parent
-        }
-        
-        public func textDidBeginEditing(_ notification: Notification) {
-            guard let editor = notification.object as? NSTextView else { return }
-            
-            if parent.isPlaceholder {
-                editor.string = ""
-                editor.textColor = parent.textColor
-            }
-        }
-        
-        public func textDidChange(_ notification: Notification) {
-            guard let editor = notification.object as? NSTextView else { return }
-            parent.text = editor.string
-            
-            if editor.string.count > 0 {
-                parent.isPlaceholder = false
-            } else {
-                parent.isPlaceholder = true
-            }
-            if parent.maxSize == -1 {
-                parent.obj.size = editor.intrinsicContentSize.height
-            } else {
-                parent.obj.size = editor.intrinsicContentSize.height > parent.maxSize ? parent.maxSize : editor.intrinsicContentSize.height
-            }
-        }
-        
-        public func textDidEndEditing(_ notification: Notification) {
-            guard let editor = notification.object as? NSTextView else { return }
-            
-            if parent.isPlaceholder {
-                editor.string = parent.placeholder
-                editor.textColor = parent.textColor.withAlphaComponent(0.35)
-            }
-        }
-        
-    }
-    
-}
-
-#else
-
 import UIKit
 
 public struct MultiTextField: UIViewRepresentable {
     
     @EnvironmentObject var obj: ObservedMultiTextField
     @Binding public var text: String
-    @State private var isPlaceholder: Bool = true
     
     public var placeholder: String = ""
     public var maxSize: CGFloat = -1.0
@@ -106,6 +16,8 @@ public struct MultiTextField: UIViewRepresentable {
         self.maxSize = maxSize
         self.textColor = textColor
     }
+    
+    @State private var isPlaceholder: Bool = true
     
     public func makeUIView(context: UIViewRepresentableContext<MultiTextField>) -> UITextView {
         let view = UITextView()
@@ -168,7 +80,6 @@ public struct MultiTextField: UIViewRepresentable {
         
     }
 }
-#endif
 
 public class ObservedMultiTextField: ObservableObject {
     
