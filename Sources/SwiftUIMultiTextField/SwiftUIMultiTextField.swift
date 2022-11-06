@@ -34,7 +34,7 @@ public struct MultiTextField: UIViewRepresentable {
     }
     
     public func updateUIView(_ uiView: UITextView, context: UIViewRepresentableContext<MultiTextField>) {
-        
+        uiView.text = isPlaceholder ? placeholder : text
     }
     
     public func makeCoordinator() -> Coordinator {
