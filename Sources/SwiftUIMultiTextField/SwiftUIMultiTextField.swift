@@ -18,6 +18,7 @@ public struct MultiTextField: UIViewRepresentable {
     }
     
     @State private var isPlaceholder: Bool = true
+    @State private var editing: Bool = true
     
     public func makeUIView(context: UIViewRepresentableContext<MultiTextField>) -> UITextView {
         let view = UITextView()
@@ -34,7 +35,7 @@ public struct MultiTextField: UIViewRepresentable {
     }
     
     public func updateUIView(_ uiView: UITextView, context: UIViewRepresentableContext<MultiTextField>) {
-        uiView.text = isPlaceholder ? placeholder : text
+        uiView.text = editing ? text : (isPlaceholder ? placeholder : text)
     }
     
     public func makeCoordinator() -> Coordinator {
@@ -50,6 +51,7 @@ public struct MultiTextField: UIViewRepresentable {
         }
         
         public func textViewDidBeginEditing(_ textView: UITextView) {
+            parent.editing = true
             if parent.isPlaceholder {
                 textView.text = ""
                 textView.textColor = parent.textColor
@@ -71,6 +73,7 @@ public struct MultiTextField: UIViewRepresentable {
         }
         
         public func textViewDidEndEditing(_ textView: UITextView) {
+            parent.editing = false
             if parent.isPlaceholder {
                 textView.text = parent.placeholder
                 textView.textColor = parent.textColor.withAlphaComponent(0.35)
