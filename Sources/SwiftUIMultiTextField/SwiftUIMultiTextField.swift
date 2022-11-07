@@ -52,6 +52,7 @@ public struct MultiTextField: UIViewRepresentable {
         
         public func textViewDidBeginEditing(_ textView: UITextView) {
             parent.editing = true
+            parent.isPlaceholder = false
             if parent.isPlaceholder {
                 textView.text = ""
                 textView.textColor = parent.textColor
@@ -60,11 +61,6 @@ public struct MultiTextField: UIViewRepresentable {
         
         public func textViewDidChange(_ textView: UITextView) {
             parent.text = textView.text
-            if textView.text.count > 0 {
-                parent.isPlaceholder = false
-            } else {
-                parent.isPlaceholder = true
-            }
             if parent.maxSize == -1 {
                 parent.obj.size = textView.contentSize.height
             } else {
@@ -74,6 +70,8 @@ public struct MultiTextField: UIViewRepresentable {
         
         public func textViewDidEndEditing(_ textView: UITextView) {
             parent.editing = false
+            parent.isPlaceholder = textView.text.isEmpty
+            
             if parent.isPlaceholder {
                 textView.text = parent.placeholder
                 textView.textColor = parent.textColor.withAlphaComponent(0.35)
