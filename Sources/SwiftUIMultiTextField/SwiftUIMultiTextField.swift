@@ -18,7 +18,7 @@ public struct MultiTextField: UIViewRepresentable {
     }
     
     @State private var isPlaceholder: Bool = true
-    @State private var editing: Bool = true
+    @State private var editing: Bool = false
     
     public func makeUIView(context: UIViewRepresentableContext<MultiTextField>) -> UITextView {
         let view = UITextView()
@@ -27,7 +27,9 @@ public struct MultiTextField: UIViewRepresentable {
         view.textColor = textColor.withAlphaComponent(0.35)
         view.backgroundColor = .clear
         view.delegate = context.coordinator
-        obj.size = view.contentSize.height
+        DispatchQueue.main.async {
+            obj.size = view.contentSize.height
+        }
         view.isEditable = true
         view.isUserInteractionEnabled = true
         view.isScrollEnabled = true
@@ -35,7 +37,15 @@ public struct MultiTextField: UIViewRepresentable {
     }
     
     public func updateUIView(_ uiView: UITextView, context: UIViewRepresentableContext<MultiTextField>) {
-        uiView.text = editing ? text : (isPlaceholder ? placeholder : text)
+        if !isPlaceholder && text.isEmpty && !editing {
+            DispatchQueue.main.async {
+                isPlaceholder = true
+                uiView.text = placeholder
+                uiView.textColor = textColor.withAlphaComponent(0.35)
+            }
+        } else {
+            uiView.text = isPlaceholder ? placeholder : text
+        }
     }
     
     public func makeCoordinator() -> Coordinator {
@@ -52,11 +62,11 @@ public struct MultiTextField: UIViewRepresentable {
         
         public func textViewDidBeginEditing(_ textView: UITextView) {
             parent.editing = true
-            parent.isPlaceholder = false
             if parent.isPlaceholder {
                 textView.text = ""
                 textView.textColor = parent.textColor
             }
+            parent.isPlaceholder = false
         }
         
         public func textViewDidChange(_ textView: UITextView) {
@@ -71,7 +81,7 @@ public struct MultiTextField: UIViewRepresentable {
         public func textViewDidEndEditing(_ textView: UITextView) {
             parent.editing = false
             parent.isPlaceholder = textView.text.isEmpty
-            
+
             if parent.isPlaceholder {
                 textView.text = parent.placeholder
                 textView.textColor = parent.textColor.withAlphaComponent(0.35)
@@ -81,6 +91,7 @@ public struct MultiTextField: UIViewRepresentable {
         
     }
 }
+
 
 public class ObservedMultiTextField: ObservableObject {
     
